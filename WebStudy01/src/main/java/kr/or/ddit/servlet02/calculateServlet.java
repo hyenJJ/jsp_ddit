@@ -75,10 +75,10 @@ public class calculateServlet extends HttpServlet {
 			}
 		}else {
 			
-			req.getRequestDispatcher("/02/calculateForm.jsp").forward(req, resp);
+			//req.getRequestDispatcher("/02/calculateForm.jsp").forward(req, resp);
 		}
 		
-	}
+	} 
 	
 	
 	          

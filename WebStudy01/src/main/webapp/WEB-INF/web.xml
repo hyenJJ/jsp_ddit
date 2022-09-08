@@ -19,7 +19,7 @@
 			<param-name>param1</param-name>
 			<param-value>value1</param-value>
 		</init-param>
-		<load-on-startup>1</load-on-startup>
+		
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>DescriptionServlet</servlet-name>
