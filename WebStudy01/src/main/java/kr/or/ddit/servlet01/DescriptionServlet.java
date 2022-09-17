@@ -75,6 +75,10 @@ public class DescriptionServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		System.out.println("doGet 호출");
 		
+		System.out.println(req.getServletContext().hashCode()); 
+		System.out.println(req.getSession().getServletContext()); //파람의 서블릿의 정보
+		System.out.println(getServletContext().hashCode());
+		
 	}
     
     @Override

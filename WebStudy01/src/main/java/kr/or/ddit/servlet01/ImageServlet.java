@@ -21,7 +21,7 @@ public class ImageServlet extends HttpServlet{
       }
       
       String imageName = value;
-      String mime = getServletContext().getMimeType(imageName);
+      String mime = getServletContext().getMimeType(imageName); 
       
       //String mime = "image/jpg"
        
