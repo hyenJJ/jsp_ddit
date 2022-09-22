@@ -3,15 +3,17 @@ package kr.or.ddit.props.service;
 import java.util.List;
 
 import kr.or.ddit.commons.exception.PKNotFoundException;
-import kr.or.ddit.props.dao.FilesystempPropertyDAOImpl;
+import kr.or.ddit.props.dao.DataBasePropertyDAOImpl;
+
 import kr.or.ddit.props.dao.PropertyDAO;
 import kr.or.ddit.props.vo.PropertyVO;
 // layer에서 가장 중요한것 -> 의존성
 public class PropertyServiceImpl implements PropertyService {
 	// HCLC -> HightCohesionLooseCoupling : 응집도 높게 결합도 낮게 
 	// 결합력이 높을수밖에 없는 코드다.
-	private PropertyDAO dao = new FilesystempPropertyDAOImpl();
-	
+//	private PropertyDAO dao = new FilesystempPropertyDAOImpl();
+	private PropertyDAO dao = new DataBasePropertyDAOImpl();
+	                //dependency injection
 //	public void setDao(PropertyDAO dao) {
 //		this.dao = dao;
 //	}

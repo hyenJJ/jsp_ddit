@@ -1,0 +1,12 @@
+<html>
+    <body>
+       <h4>현재 서버의 시간 : #timeText#</h4>
+       <h4>현재 클라이언트 시간 : <span id="timeArea"></span></h4>
+       <script type="text/javascript">
+          setInterval(() => {
+        	  
+          document.getElementById("timeArea").innerHTML = new Date();
+          },1000);
+       </script>
+    </body>
+</html>
