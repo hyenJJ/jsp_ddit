@@ -176,7 +176,7 @@ public class MemberDAOImpl implements MemberDAO {
 		sql.append("    MEM_ID, MEM_NAME, MEM_ADD1,   ");
 		sql.append("    MEM_HP, MEM_MAIL, MEM_MILEAGE ");
 		sql.append("FROM MEMBER                     ");
-		sql.append("WHERE MEM_DELETE IS NULL;                     ");
+		sql.append("WHERE MEM_DELETE IS NULL                     ");
 
 		try (Connection conn = ConnectionFactory.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(sql.toString());
@@ -211,8 +211,69 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Override
 	public int updateMember(MemberVO member) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		StringBuffer sql = new StringBuffer();
+		
+		
+		sql.append("UPDATE MEMBER ");
+		sql.append("SET  	                     ");
+
+		sql.append(" 	    ,MEM_ZIP        = ?  ");
+		sql.append(" 	    ,MEM_ADD1       = ?  ");
+		sql.append(" 	    ,MEM_ADD2       = ?  ");
+		sql.append(" 	    ,MEM_HOMETEL    = ?  ");
+		sql.append(" 	    ,MEM_COMTEL     = ?  ");
+		sql.append(" 	    ,MEM_HP         = ?  ");
+		sql.append(" 	    ,MEM_MAIL       = ?  ");
+		sql.append(" 	    ,MEM_JOB        = ?  ");
+		sql.append(" 	    ,MEM_LIKE       = ?  ");
+		sql.append(" 	    ,MEM_MEMORIAL   = ?  ");
+		sql.append(" 	    ,MEM_MEMORIALDAY= TO DATE ?  ");	
+		sql.append(" 	    WHERE MEM_ID = ?     = ?  ");	
+		   
+		
+		
+		try (
+				
+		   Connection conn = ConnectionFactory.getConnection();
+		   PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+		 
+		){
+		
+			MemberVO memberVo = new MemberVO();
+			int index = 1;
+			
+			
+
+			pstmt.setString( index++, member.getMemZip());
+			pstmt.setString( index++, member.getMemAdd1());
+			pstmt.setString( index++, member.getMemAdd2());
+			pstmt.setString( index++, member.getMemHometel());
+			pstmt.setString( index++, member.getMemComtel());
+			pstmt.setString( index++, member.getMemHp());
+			pstmt.setString( index++, member.getMemMail());
+			pstmt.setString( index++, member.getMemJob());
+			pstmt.setString( index++, member.getMemLike());
+			pstmt.setString( index++, member.getMemMemorial());
+			pstmt.setString( index++, member.getMemMemorialday());
+			pstmt.setBoolean( index++, member.getMemDelete());
+			pstmt.setInt( index++, member.getMemMileage());
+			pstmt.setString( index++, member.getMemId());
+		
+				
+			return pstmt.executeUpdate();
+			
+			
+             
+	
+		
+		} catch (SQLException e) {
+			
+			throw new RuntimeException(e);
+		}
+		
+		
+	
 	}
 
 	@Override
@@ -224,14 +285,14 @@ public class MemberDAOImpl implements MemberDAO {
 	    
 	    sql.append("UPDATE MEMBER          ");
 	    sql.append("SET MEM_DELETE = '1'   ");
-	    sql.append("WHERE MEM_ID =?;       ");
+	    sql.append("WHERE MEM_ID =?       ");
 		
 		try (
 		   Connection conn = ConnectionFactory.getConnection();
 		   PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 		 
 		){
-			pstmt.setString(1, memId);
+			
 			//ResultSet rs 
 			
 //			return pstmt.executeUpdate();

@@ -15,10 +15,11 @@ import kr.or.ddit.vo.MemberVO;
 public class MemberDAOImplTest {
 	
 	MemberDAO dao = new MemberDAOImpl();
+	MemberVO member = new MemberVO();
 
+	
 	@Test
 	public void testInsertMember() {
-		   MemberVO member = new MemberVO();
 		      member.setMemId( "a002" );
 		      member.setMemPass( "java" );
 		      member.setMemName( "신규" );
@@ -52,7 +53,13 @@ public class MemberDAOImplTest {
 
 	@Test
 	public void testUpdateMember() {
-		fail("Not yet implemented");
+	   
+		member.setMemId("tm");
+		member.setMemName("가나다");
+	   int rowcnt = dao.updateMember(member);
+	   assertEquals(1, rowcnt);
+	   
+	
 	}
 
 	@Test
