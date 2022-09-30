@@ -56,7 +56,7 @@ public class MemberDAOImplTest {
 	   
 		member.setMemId("tm");
 		member.setMemName("가나다");
-	   int rowcnt = dao.updateMember(member);
+		int rowcnt = dao.updateMember(member);
 	   assertEquals(1, rowcnt);
 	   
 	

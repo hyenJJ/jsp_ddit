@@ -9,6 +9,7 @@ import kr.or.ddit.member.dao.MemberDAO;
 import kr.or.ddit.member.dao.MemberDAOImpl;
 import kr.or.ddit.member.dao.MemberDAOImpl_bak;
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.PagingVO;
 
 public class MemberServiceImpl implements MemberService {
 	
@@ -46,9 +47,9 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<MemberVO> retrieveMemberList() {
+	public List<MemberVO> retrieveMemberList(PagingVO pagingVO) {
 
-		return dao.selectMemberList();
+		return dao.selectMemberList(pagingVO);
 	}
 
 	@Override
@@ -63,6 +64,12 @@ public class MemberServiceImpl implements MemberService {
 		retrieveMember(member.getMemId());
 		int rowcnt = dao.deleteMember(member.getMemId());
 		return rowcnt > 0 ? ServiceResult.OK : ServiceResult.FAIL;
+	}
+
+	@Override
+	public int retrieveMemberCount(PagingVO pagingVO) {
+		
+		return dao.selectTotalRecord(pagingVO);
 	}
 
 }

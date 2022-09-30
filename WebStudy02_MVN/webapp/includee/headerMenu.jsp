@@ -10,7 +10,7 @@
       <a class="nav-link" href="<%=request.getContextPath() %>/member/memberList.do">회원관리</a>
     </li>
     <li class="nav-item text-nowrap">
-      <a class="nav-link" href="#">상품관리</a>
+      <a class="nav-link" href="<%=request.getContextPath()%>/prod/prodList.do">상품관리</a>
     </li>
     <li class="nav-item text-nowrap">
       <a class="nav-link" href="#">거래처관리</a>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.prod.dao.OthersDAO">
+	<select id="selectLprodList" resultType="hashMap">
+		SELECT LPROD_GU "lprodGu", LPROD_NM "lprodNm" 
+		FROM LPROD <!-- alias 사용할때 그냥 사용 하면 대문자로 바뀜 -> "" 로 묶어주면 안바뀜 -->
+	</select>
+	<select id="selectBuyerList" parameterType="string" resultType="BuyerVO">
+		SELECT BUYER_ID, BUYER_LGU, BUYER_NAME
+		FROM BUYER 
+		<where>
+			<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(LprodGu)"><!-- 조건절 -->
+			     BUYER_LGU = #{lprodGu}
+			</if>		
+		</where>
+	</select>
+</mapper>

@@ -1,129 +1,180 @@
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Map"%>
-<%@page import="kr.or.ddit.vo.MemberVO"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%
-MemberVO member = (MemberVO) request.getAttribute("member");
-if (member == null)
-	member = new MemberVO();
-Map<String, String> errors = (Map) request.getAttribute("errors");
-if (errors == null)
-	errors = new HashMap<>();
-%>
-
+    <%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>   
 <h4>가입양식</h4>
-<form action="<%=request.getContextPath()%>/member/memberInsert.do"
-	method="post">
+<form method="post">
 	<table class="table table-bordered">
 		<tr>
 			<th>회원아이디</th>
 			<td>
-			    <input type="text" name="memId" class="form-control"
-				required value="${member.memId }" />
-				<span class="error">${errors.memId}</span>
+				<input type="text" name="memId" class="form-control"
+				 value="${member['memId'] }" />
+				<span class="error">${errors['memId'] }</span>
 			</td>
 		</tr>
 		<tr>
-			<th>MEM_PASS</th>
-			<td><input type="text" name="memPass" class="form-control"
-				required value="<%=member.getMemPass()%>" /><span class="error"><%=errors.get("memPass")%></span></td>
+			<th>비밀번호</th>
+			<td>
+				<input type="text" name="memPass" class="form-control"
+				 value="${member['memPass'] }" />
+				<span class="error">${errors['memPass'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_NAME</th>
-			<td><input type="text" name="memName" class="form-control"
-				required value="<%=member.getMemName()%>" /><span class="error"><%=errors.get("memName")%></span></td>
+			<th>회원명</th>
+			<td>
+				<input type="text" name="memName" class="form-control"
+				 value="${member['memName'] }" />
+				<span class="error">${errors['memName'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_REGNO1</th>
-			<td><input type="text" name="memRegno1" class="form-control"
-				value="<%=member.getMemRegno1()%>" /><span class="error"><%=errors.get("memRegno1")%></span></td>
+			<th>주민번호1</th>
+			<td>
+				<input type="text" name="memRegno1" class="form-control"
+				value="${member['memRegno1'] }" />
+				<span class="error">${errors['memRegno1'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_REGNO2</th>
-			<td><input type="text" name="memRegno2" class="form-control"
-				value="<%=member.getMemRegno2()%>" /><span class="error"><%=errors.get("memRegno2")%></span></td>
+			<th>주민번호2</th>
+			<td>
+				<input type="text" name="memRegno2" class="form-control"
+				value="${member['memRegno2'] }" />
+				<span class="error">${errors['memRegno2'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_BIR</th>
-			<td><input type="date" name="memBir" class="form-control"
-				value="<%=member.getMemBir()%>" /><span class="error"><%=errors.get("memBir")%></span></td>
+			<th>생일</th>
+			<td>
+				<input type="date" name="memBir" class="form-control"
+				value="${member['memBir'] }" />
+				<span class="error">${errors['memBir'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_ZIP</th>
-			<td><input type="text" name="memZip" class="form-control editable"
-				required value="<%=member.getMemZip()%>" /><span class="error"><%=errors.get("memZip")%></span></td>
+			<th>우편번호</th>
+			<td>
+				<input type="text" name="memZip" class="form-control editable"
+				 value="${member['memZip'] }" />
+				<span class="error">${errors['memZip'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_ADD1</th>
-			<td><input type="text" name="memAdd1" class="form-control editable"
-				required value="<%=member.getMemAdd1()%>" /><span class="error"><%=errors.get("memAdd1")%></span></td>
+			<th>주소1</th>
+			<td>
+				<input type="text" name="memAdd1" class="form-control editable"
+				 value="${member['memAdd1'] }" />
+				<span class="error">${errors['memAdd1'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_ADD2</th>
-			<td><input type="text" name="memAdd2" class="form-control editable"
-				required value="<%=member.getMemAdd2()%>" /><span class="error"><%=errors.get("memAdd2")%></span></td>
+			<th>주소2</th>
+			<td>
+				<input type="text" name="memAdd2" class="form-control editable"
+				 value="${member['memAdd2'] }" />
+				<span class="error">${errors['memAdd2'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_HOMETEL</th>
-			<td><input type="text" name="memHometel" class="form-control editable"
-				value="<%=member.getMemHometel()%>" /><span class="error"><%=errors.get("memHometel")%></span></td>
+			<th>집전번</th>
+			<td>
+				<input type="text" name="memHometel" class="form-control editable"
+				value="${member['memHometel'] }" />
+				<span class="error">${errors['memHometel'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_COMTEL</th>
-			<td><input type="text" name="memComtel" class="form-control editable"
-				value="<%=member.getMemComtel()%>" /><span class="error"><%=errors.get("memComtel")%></span></td>
+			<th>회사전번</th>
+			<td>
+				<input type="text" name="memComtel" class="form-control editable"
+				value="${member['memComtel'] }" />
+				<span class="error">${errors['memComtel'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_HP</th>
-			<td><input type="text" name="memHp" class="form-control editable"
-				value="<%=member.getMemHp()%>" /><span class="error"><%=errors.get("memHp")%></span></td>
+			<th>휴대폰</th>
+			<td>
+				<input type="text" name="memHp" class="form-control editable"
+				value="${member['memHp'] }" />
+				<span class="error">${errors['memHp'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_MAIL</th>
-			<td><input type="text" name="memMail" class="form-control" editable
-				required value="<%=member.getMemMail()%>" /><span class="error"><%=errors.get("memMail")%></span></td>
+			<th>이메일</th>
+			<td>
+				<input type="text" name="memMail" class="form-control editable"
+				 value="${member['memMail'] }" />
+				<span class="error">${errors['memMail'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_JOB</th>
-			<td><input type="text" name="memJob" class="form-control editable"
-				value="<%=member.getMemJob()%>" /><span class="error"><%=errors.get("memJob")%></span></td>
+			<th>직업</th>
+			<td>
+				<input type="text" name="memJob" class="form-control editable"
+				value="${member['memJob'] }" />
+				<span class="error">${errors['memJob'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_LIKE</th>
-			<td><input type="text" name="memLike" class="form-control editable"
-				value="<%=member.getMemLike()%>" /><span class="error"><%=errors.get("memLike")%></span></td>
+			<th>취미</th>
+			<td>
+				<input type="text" name="memLike" class="form-control editable"
+				value="${member['memLike'] }" />
+				<span class="error">${errors['memLike'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_MEMORIAL</th>
-			<td><input type="text" name="memMemorial" class="form-control editable"
-				value="<%=member.getMemMemorial()%>" /><span class="error"><%=errors.get("memMemorial")%></span></td>
+			<th>기념일</th>
+			<td>
+				<input type="text" name="memMemorial" class="form-control editable"
+				value="${member['memMemorial'] }" />
+				<span class="error">${errors['memMemorial'] }</span>
+			</td>
 		</tr>
 		<tr>
-			<th>MEM_MEMORIALDAY</th>
-			<td><input type="date" name="memMemorialday editable"
-				class="form-control" value="<%=member.getMemMemorialday()%>" /><span
-				class="error"><%=errors.get("memMemorialday")%></span></td>
+			<th>기념일자</th>
+			<td>
+				<input type="date" name="memMemorialday"
+				class="form-control editable" value="${member['memMemorialday'] }" />
+				<span
+				class="error">${errors['memMemorialday'] }</span>
+			</td>
 		</tr>
 		<tr>
-		    <td colspan = "2">
-		      <input type="reset" value="취소" class="btn btn-warning"/>
-		      <input type="submit" value="저장" class="btn btn-primary"/>
-		    </td>
+			<td colspan="2">
+				<input type="reset" value="취소" class="btn btn-warning" />
+				<input type="submit" value="저장" class="btn btn-primary"/>
+			</td>
 		</tr>
 	</table>
-
 </form>
-<%
-    if("UPDATE".equals(request.getAttribute("command"))){
-    
-    
-%>
-<script>
-    //editable클래스가 아닌input 태그      prop는 속성 타입이 boolean이면 그대로 유지할수 있음
-    $(":input:not(.editable)").prop("readyonly",true);
+<c:if test="${command eq 'UPDATE' }">
+	<script type="text/javascript">
+		$(":input:not(.editable)").prop("readonly", true);
+	</script>
+</c:if>
 
-</script>
-<%
-    }
-%>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    

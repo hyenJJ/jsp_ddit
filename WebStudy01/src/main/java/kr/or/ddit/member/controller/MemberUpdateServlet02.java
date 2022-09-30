@@ -28,20 +28,22 @@ public class MemberUpdateServlet02 extends HttpServlet {
 
 	private MemberService service = new MemberServiceImpl(); // 컨트롤러와 서비스 사이에 결합력 발생
 
-	   private void viewResolve(
-		         String commandPage, 
-		         HttpServletRequest req, 
-		         HttpServletResponse resp
-		   ) throws ServletException, IOException{
-		      if(commandPage.startsWith("redirect:")) {
-		         commandPage = commandPage.substring("redirect:".length());
-		         resp.sendRedirect(req.getContextPath() + commandPage);
-		      }else {
-		         req.setAttribute("commandPage", commandPage);
-		         String viewName = "/WEB-INF/views/template.jsp";
-		         req.getRequestDispatcher(viewName).forward(req, resp);
-		      }
-		   }
+	private void viewResolve(String logicalViewName, HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+
+		if (logicalViewName.startsWith("redirect:")) {
+			logicalViewName = logicalViewName.substring("redirect:".length());
+			resp.sendRedirect(req.getContextPath() + logicalViewName);
+
+		} else {
+
+//			req.setAttribute("commandPage", commandPage);
+
+			String viewName = "/"+logicalViewName+".tiles";
+			req.getRequestDispatcher(viewName).forward(req, resp);
+		}
+
+	}
 		   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		      req.setCharacterEncoding("UTF-8");
 		      
@@ -57,8 +59,8 @@ public class MemberUpdateServlet02 extends HttpServlet {
 		      req.setAttribute("member", member);
 		      req.setAttribute("command", "UPDATE");
 		      
-		      String commandPage = "/WEB-INF/views/member/memberForm.jsp";
-		      viewResolve(commandPage, req, resp);
+		      String logicalViewName = "member/memberForm";
+		      viewResolve(logicalViewName, req, resp);
 		   }
 
 
@@ -96,26 +98,26 @@ public class MemberUpdateServlet02 extends HttpServlet {
 	      //검증 분리
 	boolean valid = validate(member, errors);
 	      
-	      String commandPage = null;
+	      String logicalViewName = null;
 	      if(valid) {
 	         ServiceResult result = service.modifyMember(member);
 	         switch (result) {
 	         case OK:
-	            commandPage = "redirect:/member/memberList.do";
+	        	 logicalViewName = "redirect:/member/memberList.do";
 	            break;
 
 	         default:
 
 				req.setAttribute("message", "서버 오류, 조금 이따 다시 하세요.");
-				commandPage = "/WEB-INF/views/member/memberForm.jsp";
+				logicalViewName = "member/memberForm";
 				break;
 			}
 
 		} else {
-			commandPage = "/WEB-INF/views/member/memberForm.jsp";
+			logicalViewName = "member/memberForm";
 		}
 
-		viewResolve(commandPage, req, resp);
+		viewResolve(logicalViewName, req, resp);
 
 	}
 

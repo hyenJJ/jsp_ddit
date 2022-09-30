@@ -57,8 +57,8 @@ public class MemberDAOImpl_bak implements MemberDAO {
 		     		
 		
 		try (
-		   Connection conn = ConnectionFactory.getConnection();
-		   PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+		//   Connection conn = ConnectionFactory.getConnection();
+		//   PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 		 
 		){
 			int index = 1;
@@ -122,12 +122,12 @@ public class MemberDAOImpl_bak implements MemberDAO {
 
 			}
 
-			return member;
 		} catch (SQLException e) {
 
 			throw new RuntimeException(e);
 		}
-*/
+
+	//	return memId;
 	}
 
 	@Override
@@ -235,5 +235,5 @@ public class MemberDAOImpl_bak implements MemberDAO {
 		
 	
 	}
-
+  */
 }

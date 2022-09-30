@@ -9,9 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+
 import kr.or.ddit.member.service.MemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
 import kr.or.ddit.vo.MemberVO;
+import kr.or.ddit.vo.PagingVO;
+import kr.or.ddit.vo.SearchVO;
 
 /**
  *  RESTful URI
@@ -32,6 +36,7 @@ import kr.or.ddit.vo.MemberVO;
  * @author PC-14
  *
  */
+
 @WebServlet("/member/memberList.do")
 public class MemberListServlet extends HttpServlet {
 	
@@ -40,12 +45,41 @@ public class MemberListServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		List<MemberVO> memberList = service.retrieveMemberList();
+		req.setCharacterEncoding("UTF-8");
+		String searchType = req.getParameter("searchType");
+		String searchWord = req.getParameter("searchWord");
+		SearchVO simpleCondition = new SearchVO(searchType, searchWord);		
+				
 		
-		req.setAttribute("memberList", memberList);
-		String commandPage = "/WEB-INF/views/member/memberList.jsp"; 
-		req.setAttribute("commandPage", commandPage);
-		String viewName = "/WEB-INF/views/template.jsp"; 
+		
+		String pageParam = req.getParameter("page");
+		int currentPage = 1;
+		
+		
+		//pageParam 문자열이 숫자형으로 되어있는지 확인
+		if(StringUtils.isNumeric(pageParam)) {
+			currentPage = Integer.parseInt(pageParam);
+		}
+		
+		PagingVO<MemberVO> pagingVO = new PagingVO<>(3,2);  //screen , paging
+		pagingVO.setCurrentPage(currentPage);
+		pagingVO.setSimpleCondition(simpleCondition);
+		
+		int totalRecord = service.retrieveMemberCount(pagingVO);
+		pagingVO.setTotalRecord(totalRecord);
+//		pagingVO.setTotalRecord();
+		
+		
+		
+		List<MemberVO> memberList = service.retrieveMemberList(pagingVO);
+		pagingVO.setDataList(memberList);
+		
+		req.setAttribute("pagingVO", pagingVO);
+//		req.setAttribute("memberList", memberList); 이미 페이징VO에 있음
+//		String commandPage = "/WEB-INF/views/member/memberList.jsp"; 
+//		req.setAttribute("commandPage", commandPage);
+		
+		String viewName = "/member/memberList.tiles"; 
 		req.getRequestDispatcher(viewName).forward(req, resp);
 	}
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.emp.dao.EmpDAO">
+
+
+
+	<insert id="insertEmp" parameterType="EmpVO">
+	
+			
+		INSERT INTO EMP ( EMP, ENAME, JOB, MGR,HIREDATE,SAL, COMM, DEPTNO) 
+         VALUES (  
+					 #{empno, jdbcType=NUMERIC}
+					,#{ename, jdbcType=VARCHAR}
+					,#{job, jdbcType=VARCHAR}
+					,#{mgr, jdbcType=NUMERIC}
+					,#{hiredate, jdbcType=DATE}
+					,#{sal, jdbcType=NUMERIC}
+					,#{comm, jdbcType=NUMERIC}
+					,#{deptno, jdbcType=NUMERIC}
+					
+					 );
+	</insert>
+	
+	
+	<select id="selectEmpList"   resultType ="EmpVO">
+				SELECT *
+			    FROM EMP
+	</select>
+	
+	
+
+</mapper>

@@ -21,9 +21,7 @@ public class MemberViewServlet extends HttpServlet {
 
 		req.setCharacterEncoding("UTF-8");
 		String who = req.getParameter("who");
-		
-        System.out.println(who);
-        
+	
         if(who==null || who.isEmpty()) {
         	resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         	return;

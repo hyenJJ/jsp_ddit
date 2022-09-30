@@ -1,186 +1,110 @@
 package kr.or.ddit.vo;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
+
+import kr.or.ddit.validate.DeleteGroup;
+import kr.or.ddit.validate.InsertGroup;
+import kr.or.ddit.validate.UpdateGroup;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * 
  * 회원 관리(Domain Layer)
- *
+ * 
+ * 한사람의 회원에 대한 정보(구매기록이 포함)
+ *  has 관계
+ *  has A (1 : 1)
+ *  has Many (1 : N)
+ *  
+ *  2개 이상의 테이블을 조인하고 결과 바인딩하는 방법. 
+ *  1. 대상 테이블 간의 관계 파악. 
+ *  	MEMBER(1) : PROD(N)
+ *  	PROD(1) : BUYER(1)
+ *  	PROD(1) : MEMBER(N)
+ *  
+ *  2. 각 테이블로부터 데이터를 바인딩 할 VO 정의 
+ *     해당 VO 간의 관게를 형성.
+ *     MeberVO has Many prodVO
+ *     ProdVO has A BuyerVO
+ *     ProdVO has Many MemberVO
+ *     
+ *  3. 조인 쿼리 작성
+ *  4. resultMap 을 사용하여 결과 바인딩(수동)
+ *  	has Many -> Collection 
+ *  	has A -> association
+ *  
  */
+
+@Data
+@EqualsAndHashCode(of="memId")
+@ToString(exclude = {"memPass", "memRegno1" , "memRegno2"})
 public class MemberVO implements Serializable{
 	
+	private int rnum;
+	
+	@NotBlank(groups = {Default.class, DeleteGroup.class} ) // 여기서 조심해야할거 import 할 때 hibernate.validation X  
 	private String memId;
 	
+	@NotBlank
+	@Size(min = 4, max = 12 ,groups = {Default.class, DeleteGroup.class} )
 	@JsonIgnore
 	private transient String memPass;  //직렬화에서 제외 
+	
+	@NotBlank(groups = {Default.class, DeleteGroup.class} )
 	private String memName;
+	
+	@NotBlank(groups = {InsertGroup.class} ) // 집합 단위로 제약 조건을 묶기
 	@JsonIgnore
 	private transient String memRegno1;
+	
+	@NotBlank(groups = {InsertGroup.class} )
 	@JsonIgnore
 	private transient String memRegno2;
+	
 	private String memBir;
+	
+	@NotBlank
 	private String memZip;
+	
+	@NotBlank
 	private String memAdd1;
+	
+	@NotBlank
 	private String memAdd2;
 	private String memHometel;
 	private String memComtel;
 	private String memHp;
+	
+	@Email()// groups , message 
+	@NotBlank
 	private String memMail;
 	private String memJob;
 	private String memLike;
 	private String memMemorial;
 	private String memMemorialday;
+	
+	@Min(0)
 	private Integer memMileage;
 	private Boolean memDelete;
-	public String getMemId() {
-		return memId;
-	}
-	public void setMemId(String memId) {
-		this.memId = memId;
-	}
-	public String getMemPass() {
-		return memPass;
-	}
-	public void setMemPass(String memPass) {
-		this.memPass = memPass;
-	}
-	public String getMemName() {
-		return memName;
-	}
-	public void setMemName(String memName) {
-		this.memName = memName;
-	}
-	public String getMemRegno1() {
-		return memRegno1;
-	}
-	public void setMemRegno1(String memRegno1) {
-		this.memRegno1 = memRegno1;
-	}
-	public String getMemRegno2() {
-		return memRegno2;
-	}
-	public void setMemRegno2(String memRegno2) {
-		this.memRegno2 = memRegno2;
-	}
-	public String getMemBir() {
-		return memBir;
-	}
-	public void setMemBir(String memBir) {
-		this.memBir = memBir;
-	}
-	public String getMemZip() {
-		return memZip;
-	}
-	public void setMemZip(String memZip) {
-		this.memZip = memZip;
-	}
-	public String getMemAdd1() {
-		return memAdd1;
-	}
-	public void setMemAdd1(String memAdd1) {
-		this.memAdd1 = memAdd1;
-	}
-	public String getMemAdd2() {
-		return memAdd2;
-	}
-	public void setMemAdd2(String memAdd2) {
-		this.memAdd2 = memAdd2;
-	}
-	public String getMemHometel() {
-		return memHometel;
-	}
-	public void setMemHometel(String memHometel) {
-		this.memHometel = memHometel;
-	}
-	public String getMemComtel() {
-		return memComtel;
-	}
-	public void setMemComtel(String memComtel) {
-		this.memComtel = memComtel;
-	}
-	public String getMemHp() {
-		return memHp;
-	}
-	public void setMemHp(String memHp) {
-		this.memHp = memHp;
-	}
-	public String getMemMail() {
-		return memMail;
-	}
-	public void setMemMail(String memMail) {
-		this.memMail = memMail;
-	}
-	public String getMemJob() {
-		return memJob;
-	}
-	public void setMemJob(String memJob) {
-		this.memJob = memJob;
-	}
-	public String getMemLike() {
-		return memLike;
-	}
-	public void setMemLike(String memLike) {
-		this.memLike = memLike;
-	}
-	public String getMemMemorial() {
-		return memMemorial;
-	}
-	public void setMemMemorial(String memMemorial) {
-		this.memMemorial = memMemorial;
-	}
-	public String getMemMemorialday() {
-		return memMemorialday;
-	}
-	public void setMemMemorialday(String memMemorialday) {
-		this.memMemorialday = memMemorialday;
-	}
-	public Integer getMemMileage() {
-		return memMileage;
-	}
-	public void setMemMileage(Integer memMileage) {
-		this.memMileage = memMileage;
-	}
-	public Boolean getMemDelete() {
-		return memDelete;
-	}
-	public void setMemDelete(Boolean memDelete) {
-		this.memDelete = memDelete;
-	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((memId == null) ? 0 : memId.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		MemberVO other = (MemberVO) obj;
-		if (memId == null) {
-			if (other.memId != null)
-				return false;
-		} else if (!memId.equals(other.memId))
-			return false;
-		return true;
-	}
-	@Override
-	public String toString() {
-		return "MemberVO [memId=" + memId + ", memName=" + memName + ", memBir=" + memBir + ", memZip=" + memZip
-				+ ", memAdd1=" + memAdd1 + ", memAdd2=" + memAdd2 + ", memHometel=" + memHometel + ", memComtel="
-				+ memComtel + ", memHp=" + memHp + ", memMail=" + memMail + ", memJob=" + memJob + ", memLike="
-				+ memLike + ", memMemorial=" + memMemorial + ", memMemorialday=" + memMemorialday + ", memMileage="
-				+ memMileage + ", memDelete=" + memDelete + "]";
-	}
+	
+	private Set<ProdVO> prodList; // has many
+	     // Set = 중복 제거
 	
 	
-	
-	
+	public String getMemTest() {
+		return "테스트";
+	}
 }
