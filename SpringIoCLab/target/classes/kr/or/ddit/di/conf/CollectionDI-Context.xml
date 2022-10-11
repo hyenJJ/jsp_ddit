@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+	<bean id="now" class="java.util.Date" lazy-init="true" scope="prototype"></bean>
+	<!--
+		재활용 가능하개 하기 위해서 설정 
+		Date는 객체이기 때문에 bean으로 Date객체 생성해주기 
+		ref를 사용하려면 무조건 등록된게 있어야함
+		새로운 객체를 생성해줘야하기 때문에 
+		scope = "prototype" 설정
+		prototype 은 이미 lazy설정이 들어가있다 -> 생략가능 
+	-->
+													<!-- list의 제네릭 타입을 string으로 제한  -->
+	<util:list id="list" list-class="java.util.LinkedList" value-type="java.lang.String">
+		<value>textValue1</value>
+		<value>textValue2</value>
+	</util:list>
+	<util:set id="set" set-class="java.util.LinkedHashSet" value-type="java.util.Date">
+		<bean class="java.util.Date"/>
+		<ref bean="now" />
+	</util:set>
+	<util:map id="map" map-class="java.util.LinkedHashMap" key-type="java.lang.String">
+		<entry key="key1">
+			<bean class="kr.or.ddit.di.VariousDIVO"></bean>
+		</entry>
+		<entry key="key2">
+			<value>entryValue2</value>
+		</entry>
+		<entry key="now">
+			<ref bean="now"/>
+		</entry>
+	</util:map>
+<!-- 	<util:properties id="props" location="classpath:/kr/or/ddit/di/DBInfo.properties">
+			<prop key="name1">value1</prop>
+			<prop key="name2">value2</prop>
+	</util:properties> -->
+	<bean id="stringArray" class="kr.or.ddit.di.collection.StringArrayFactoryBean"></bean>
+	
+	
+	<!-- 생성하고 elemente 까지 미리 초기화 할 수 있다  -->
+	
+
+	<bean id="colVO1" class="kr.or.ddit.di.collection.CollectionDIVO"
+		c:strList-ref="list"
+		c:dateSet-ref="set"
+		c:map-ref="map"
+		c:props-ref="dbInfo"
+		c:array-ref="stringArray"
+	/>
+	
+
+	
+	
+
+
+	<bean id="colVO2" class="kr.or.ddit.di.collection.CollectionDIVO"
+		p:strList-ref="list"
+		p:dateSet-ref="set"
+		p:map-ref="map"
+		p:props-ref="dbInfo"
+		p:array-ref="stringArray"
+	
+	>
+		
+	</bean>
+	
+	
+</beans>
+
+<!-- propertis는 어차피 value는 문자열 형태이기 때문에 <value> 해줄 필요가 없음
+	
+	배열 사이에 null 값을 넣어주고 싶으면  <null></null> 사용
+ -->

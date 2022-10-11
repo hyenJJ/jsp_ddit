@@ -1,6 +1,7 @@
 package kr.or.ddit.member.controller;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,17 +9,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.map.HashedMap;
-import org.apache.commons.lang3.StringUtils;
+
 
 
 import kr.or.ddit.enumpkg.ServiceResult;
+import kr.or.ddit.file.MultipartFile;
+import kr.or.ddit.file.filter.StandardMultipartHttpServletRequest;
 import kr.or.ddit.member.service.MemberService;
 import kr.or.ddit.member.service.MemberServiceImpl;
 import kr.or.ddit.validate.InsertGroup;
@@ -26,6 +29,7 @@ import kr.or.ddit.validate.ValidateUtils;
 import kr.or.ddit.vo.MemberVO;
 
 @WebServlet("/member/memberInsert.do")
+@MultipartConfig
 public class MemberInsertServlet extends HttpServlet {
 
 	private MemberService service = new MemberServiceImpl(); // 컨트롤러와 서비스 사이에 결합력 발생
@@ -59,7 +63,7 @@ public class MemberInsertServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		req.setCharacterEncoding("UTF-8");
+		
 
 		MemberService service = new MemberServiceImpl();
 
@@ -82,11 +86,17 @@ public class MemberInsertServlet extends HttpServlet {
 		try {
 			BeanUtils.populate(memVo, req.getParameterMap());
 
-		} catch (Exception e) {
+		} catch (IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException(e);
 
 		}
-
+		
+		if (req instanceof StandardMultipartHttpServletRequest ) {
+			MultipartFile memImage  = ((StandardMultipartHttpServletRequest ) req).getFile("memImage") ;
+			memVo.setMemImage(memImage);
+			
+		}
+		
 //		Map<String, String> errors = new HashMap<>();
 		
 		Map<String, String> errors = new ValidateUtils<MemberVO>().validate(memVo, InsertGroup.class);

@@ -48,7 +48,7 @@ public class ProdListServlet extends HttpServlet{
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setCharacterEncoding("UTF-8");
+	
 		String accept = req.getHeader("Accept");
 		
 		if(accept.contains("json")) {

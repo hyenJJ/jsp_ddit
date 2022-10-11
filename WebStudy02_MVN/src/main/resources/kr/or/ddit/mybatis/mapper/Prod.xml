@@ -195,7 +195,6 @@
 		#{prodOutline,jdbcType=VARCHAR}
 		, PROD_DETAIL =
 		#{prodDetail,jdbcType=CLOB}
-		, PROD_IMG = #{prodImg,jdbcType=VARCHAR}
 		,
 		PROD_TOTALSTOCK = #{prodTotalstock,jdbcType=NUMERIC}
 		, PROD_INSDATE =
@@ -216,6 +215,11 @@
 		#{prodQtysale,jdbcType=NUMERIC}
 		, PROD_MILEAGE =
 		#{prodMileage,jdbcType=NUMERIC}
+		
+		<if test="prodImg neq null">
+		, PROD_IMG = #{prodImg,jdbcType=VARCHAR}
+		</if>
+		
 		WHERE PROD_ID =
 		#{prodId,jdbcType=VARCHAR}
 	</update>

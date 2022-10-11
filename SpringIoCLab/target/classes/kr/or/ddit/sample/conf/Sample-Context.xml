@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+                        <!-- 여기를 한번 갔다옴  -->
+ <!-- bean 1개가 객체 1 -->
+ <!-- 객체가 생성될 때는 type이 있어야함 -> class -->
+ <!-- Convention Over Configuration 
+ 		-> 지금까지의 관행을 코드화 시켜버림 
+  -->
+	<bean id="sampleDAO_O" class="kr.or.ddit.sample.dao.SampleDAOImpl_Oracle"></bean>
+	
+	<bean id="sampleDAO_M" class="kr.or.ddit.sample.dao.SampleDAOImpl_MariaDB"></bean>
+	
+	<!--기본 생성자가 없음  new SampleServiceImpl(); -->
+	<bean id="sampleService" class="kr.or.ddit.sample.service.SampleServiceImpl">
+		<constructor-arg name="dao" ref="sampleDAO_O"></constructor-arg>
+	</bean>
+	
+	<bean id="sampleView" class="kr.or.ddit.sample.view.SampleView"> 
+		<property name="service" ref="sampleService" />
+	</bean>
+
+</beans>

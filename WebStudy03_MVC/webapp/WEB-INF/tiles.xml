@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd" >
+<tiles-definitions> <!-- definition 화면 1 -->
+
+	<!-- definition name == lgical view name --> 
+	
+  <definition name="parent" template="/WEB-INF/views/template.jsp">
+  	<put-attribute name="title" value="Company403" />
+  	<put-attribute name="preScript" value="/includee/preScript.jsp"/>
+  	<put-attribute name="headerMenu" value="/includee/headerMenu.jsp"/>
+  	<put-attribute name="leftMenu" value="/includee/leftMenu.jsp"/>
+  	
+  	
+  	<put-attribute name="footer" value="/includee/footer.jsp"/>
+  	<put-attribute name="postScript" value="/includee/postScript.jsp"/>
+  </definition> <!-- exraited definition -->
+                                              <!-- 중복제거를 위해 parent 에게 상속 받아서 써줄 필요가 없음 -->
+  <definition name="index" extends="parent" ><!-- template="/WEB-INF/views/template.jsp" -->
+  	<put-attribute name="main" value="/WEB-INF/views/index.jsp" />
+  </definition>
+
+  <definition name="member/*" extends="parent" preparer="kr.or.ddit.member.view.MemberViewPreparer">  	
+  	<put-attribute name="main" value="/WEB-INF/views/member/{1}.jsp" />
+  </definition>
+
+
+  <definition name="prod/*" extends="parent" preparer="kr.or.ddit.prod.view.ProdViewPreparer">  	
+  	<put-attribute name="main" value="/WEB-INF/views/prod/{1}.jsp" />
+  </definition> 
+
+  <definition name="buyer/*" extends="parent" preparer="kr.or.ddit.prod.view.BuyerViewPreparer">  	
+  	<put-attribute name="main" value="/WEB-INF/views/buyer/{1}.jsp" />
+  </definition> 
+  
+  
+ 
+</tiles-definitions>

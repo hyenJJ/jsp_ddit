@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+	<!-- 스키마 종류 : beans, c, p, util, mybatis-spring  -->
+	
+	<!-- 스프링과 mybatis 연동 
+		1. DataSource bean 등록
+	-->
+		<util:properties id="dbinfo" location="classpath:/kr/or/ddit/mybatis/DBInfo.properties" />
+		
+		<!-- spring EL 은 #{} -->
+		<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" 
+			p:driverClassName="#{dbinfo.driverClassName}"
+			p:url="#{dbinfo['url']}"
+			p:username="#{dbinfo['user']}"
+			p:password="#{dbinfo['password']}"
+			p:initialSize="#{dbinfo['initialSize']}"
+			p:maxTotal="#{dbinfo['maxTotal']}"
+			p:maxWaitMillis="#{dbinfo['maxWait']}"
+			p:maxIdle="#{dbinfo['maxIdle']}"
+		/>
+		
+		
+		<!--2. SqlSessionFactory 빌드  -->
+		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" 
+			p:dataSource-ref="dataSource" 
+			p:configLocation="classpath:/kr/or/ddit/mybatis/Configuration.xml"
+			p:mapperLocations="classpath:/kr/or/ddit/mybatis/mappers/*.xml"
+		/>
+		<!-- xml mapper를 등록하지 않으면 쓰지 못하는 문제가 발생하기 때문에 *.xml로 모두 등록 -->
+		
+		
+		<!-- 3. SqlSessionTemplate 등록 : Optional -->
+		<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" 
+			c:sqlSessionFactory-ref="sqlSessionFactory"
+		/>
+		
+		<!-- 4. Mapper Scanner 활용. -->
+		<!-- ** -> 몇단계가 와도 다 포함해줌 -->
+		<!-- anooteation = includefilter -->
+		<!-- 이게 없다면 template에서 구현체를 받아 사용  -->
+		<mybatis-spring:scan base-package="kr.or.ddit.**.dao" 
+			annotation="org.apache.ibatis.annotations.Mapper"
+			factory-ref="sqlSessionFactory"
+			
+		/>
+</beans>

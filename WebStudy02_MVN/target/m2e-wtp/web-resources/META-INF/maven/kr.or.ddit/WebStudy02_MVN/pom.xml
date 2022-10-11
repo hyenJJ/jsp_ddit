@@ -164,6 +164,14 @@
 			<version>0.2.7</version>
 		</dependency>
 
+		<!-- File upload 지원 -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+
 
 
 

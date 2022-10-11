@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- Auto Regist  Auto injection : Annotation 기반 -->
+	<context:annotation-config  />
+	<context:component-scan base-package="kr.or.ddit.sample" use-default-filters="false"></context:component-scan>
+<!--1.  auto regist
+	@Component
+	@Repository (dao)
+	@Service
+	@Controller
+	@Configuration
+	
+	@ControllerAdvice
+	@RESTController
+	@RESTControllerAdvice-->	
+	
+	
+<!-- 2. auto injection
+	@AutoWired : type을 기준으로 빈을 검색하고, 주입.
+	@Resource : 검색 기준을 설정 할 수 있음. -->
+	
+</beans>
+	

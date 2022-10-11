@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd"
+		default-init-method="start" default-destroy-method="stop" 
+	> 
+	
+	<!-- 모든 bean들은 beans 안에 있기 때문에  beans에 설정하면 모든 bean에 적용이 된다  -->
+	<!-- 기본 namespace가 아닌 것들은 prepix 를 설정해야한다 -->
+
+
+
+     <!-- Spring DI container 사용 단계
+     	1. spring-context 의존성 추가.
+     	2. spring bean configuration file 작성
+     		1) bean 등록
+     		2) 등록된 bean 들간의 의존관계 형성(의존성 주입 : Dependency Injection)
+     			- setter Injection : property, p
+     			- constructor Injection : constructor-arg, c
+     	3. 어플리케이션의 entry point 에서 Container 객체(ApplicationContext) 생성
+     	4. getBean 필요 객체 주입. 
+     
+      -->
+      
+      
+      <bean id="sampleDAO_O" class="kr.or.ddit.sample.dao.SampleDAOImpl_Oracle" 
+    		
+      /><!-- 객체도 생명주기가 존재함  -->
+      
+      <bean id="sampleService" class="kr.or.ddit.sample.service.SampleServiceImpl" 
+      	p:dao-ref="sampleDAO_O" 
+
+      />
+      
+      <bean id="sampleView1" class="kr.or.ddit.sample.view.SampleView" 
+      	p:service-ref="sampleService"
+		lazy-init="true"
+      />
+      
+<!--   <bean id="sampleView2" class="kr.or.ddit.sample.view.SampleView" 
+      	p:service-ref="sampleService"
+      />  -->
+      <!-- 기본 타입은 singlton 임
+      		scope = "prototype" 을 했을 때 객체 생성할 때마다 다른 객체가 생성 됨 
+      		prototype 은 이미 lazy설정이 들어가있다
+      		ex) memberVO를 singlton으로 한다면 전에 주입된던 데이터가 같이 옴 	
+      		
+      		
+      		또, 객체 생성 시점이 뒤로 밀림 (= 주입하기전에는 생성이 안됨)
+      		
+      		lazy-init="true"  -> 객체 생성 시점이 주입 될 때 생성 
+      		sampleView1 을 생성 시켰을 때 -> 객체가 3개 생성됨 
+      		
+      		depends-on=""
+      		의존 할 수도 있으니까 나보다 더 먼저 만들어야 해 !
+      		
+       -->
+      
+      
+      <!-- * Spring container 빈 관리 특성 
+      		1. 특별한 설정이 없는 한, 등록된 빈은 기본적으로 singleton 형태로 관리됨.
+      		scope - prototype : 주입시마다 새로운 객체 생성. 주입전까지 생성이 미뤄짐.
+      		
+      		2. 특별한 설정이 없는 한, 등록된 모든 빈이 컨테이너가 초기화될 때 일시에 객체를 생성함.
+      			lazy-init : 주입 전까지 생성이 미뤄짐.
+      			
+      		3. 빈의 객체를 생성 할 때, 생성 순서를 제어함.
+      			depends-on : 의존 가능성이 있는 빈의 객체를 먼저 생성.
+      			
+      		4. 컨테이너가 관리하는 빈은 생명주기가 형성됨, lifecycle callback 존재.
+      			*** init-method : 모든 빈의 주입이 완료된 후에 초기화가 종료. ***
+      			
+      			
+      -->
+	
+</beans>

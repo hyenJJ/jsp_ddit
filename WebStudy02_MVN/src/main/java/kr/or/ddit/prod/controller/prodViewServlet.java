@@ -13,7 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import kr.or.ddit.prod.service.ProdService;
 import kr.or.ddit.prod.service.ProdServiceImpl;
 import kr.or.ddit.vo.ProdVO;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @WebServlet("/prod/prodView.do")
 public class prodViewServlet extends HttpServlet {
 	
@@ -38,7 +39,7 @@ public class prodViewServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		req.setCharacterEncoding("UTF-8");
+	
 		String prodId = req.getParameter("what");
 		
 		if(StringUtils.isBlank(prodId)) {

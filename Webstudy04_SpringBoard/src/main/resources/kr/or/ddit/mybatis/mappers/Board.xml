@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.board.dao.BoardDAO">
+	<!-- 게시글의 목록조회 : 페이징 + 검색(제목-title, 작성자-writer, 내용-content , 전체) -->
+	
+	<resultMap type="BoardVO" id="boardListMap">
+		
+	</resultMap>
+	
+	
+	<select id="selectTotalRecord" resultType="int" parameterType="PagingVO">
+		SELECT COUNT(*)
+		FROM FREEBOARD
+	</select>
+	
+	
+	<select id="selectBoardList" resultType="BoardVO" parameterType="PagingVO" >
+		WITH SORTBOARD AS(
+			SELECT BO_NO, BO_TITLE, BO_WRITER, BO_DATE, BO_HIT, BO_REC
+			FROM FREEBOARD
+			ORDER BY ROWiD DESC
+		), RNUMBOARD AS(
+    		SELECT ROWNUM RNUM,
+   			SORTBOARD.*
+   			FROM SORTBOARD
+		)SELECT *
+		FROM RNUMBOARD
+		<![CDATA[ 
+	      WHERE RNUM >= #{startRow} AND RNUM <= #{endRow}
+	     ]]>
+	</select>
+	
+	
+	<select id="selectBoard" resultType="BoardVO" parameterType="int"> 
+	SELECT
+	    BO_NO,  BO_TITLE, BO_WRITER,
+	    BO_IP,BO_MAIL,BO_PASS, BO_CONTENT, TO_CHAR(BO_DATE, 'YYYY-MM-DD') AS BO_DATE,
+	    BO_HIT, BO_REC, BO_PARENT
+    FROM FREEBOARD
+    WHERE BO_NO = #{boNo}
+		
+		
+	</select>
+	
+	<update id="incrementBoHit" parameterType="int" >
+		UPDATE FREEBOARD
+		SET
+		BO_HIT = BO_HIT + 1
+		WHERE BO_NO = #{boNo}
+	</update>
+
+
+</mapper>

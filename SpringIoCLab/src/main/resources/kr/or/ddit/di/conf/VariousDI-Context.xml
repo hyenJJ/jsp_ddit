@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+
+	<bean id="vo1" class="kr.or.ddit.di.VariousDIVO" 
+		p:number="32"
+		p:db1Number ="23.4"
+		p:boolData="true"
+		p:ch="A"
+		p:text="TEXT"
+		
+		p:fsFile="file:D:/contents/images/cat1.jpg"
+		p:cpFile="classpath:/log4j2.xml"
+		
+		p:dbInfo-ref="dbInfo"
+	/>
+
+	
+
+
+</beans>

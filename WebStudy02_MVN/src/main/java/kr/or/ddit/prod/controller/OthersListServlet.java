@@ -20,7 +20,7 @@ public class OthersListServlet extends HttpServlet{
    
    @Override
    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-      req.setCharacterEncoding("UTF-8");
+     
       
       // 들어온 서블릿경로 둘중에 무엇인지 확인 
       String servletPath = req.getServletPath();

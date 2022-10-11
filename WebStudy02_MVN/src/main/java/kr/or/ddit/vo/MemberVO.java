@@ -1,24 +1,25 @@
 package kr.or.ddit.vo;
 
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Base64;
 import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 
+import kr.or.ddit.file.MultipartFile;
 import kr.or.ddit.validate.DeleteGroup;
 import kr.or.ddit.validate.InsertGroup;
-import kr.or.ddit.validate.UpdateGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
@@ -47,10 +48,10 @@ import lombok.ToString;
  *  	has A -> association
  *  
  */
-
 @Data
 @EqualsAndHashCode(of="memId")
 @ToString(exclude = {"memPass", "memRegno1" , "memRegno2"})
+@Slf4j
 public class MemberVO implements Serializable{
 	
 	private int rnum;
@@ -103,6 +104,30 @@ public class MemberVO implements Serializable{
 	private Set<ProdVO> prodList; // has many
 	     // Set = 중복 제거
 	
+	private String memRole;
+	
+	
+	private byte[] memImg; // db로부터 오는 데이터를 넘길 때 씀 -> 타입은 db에 맞춤
+	
+	private MultipartFile memImage;
+	
+	//이미지를 저장하기 위한 구조 memImage byte 변환 -> memImg
+	public void setMemImage(MultipartFile memImage) throws IOException {
+		if(memImage == null || memImage.isEmpty()) return;
+		this.memImage = memImage;
+		this.memImg =  memImage.getBytes();
+		
+	}
+	
+	public String getBase64Img() {
+		if(memImg == null) {
+			return null;
+		}else {
+			String base64Text = Base64.getEncoder().encodeToString(memImg);
+			log.info("base64 encoded text : {}" , base64Text);
+			return base64Text;
+		}
+	}
 	
 	public String getMemTest() {
 		return "테스트";

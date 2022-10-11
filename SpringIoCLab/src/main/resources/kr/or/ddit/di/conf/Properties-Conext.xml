@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+
+	<!-- Properties 파일 로딩 방법 
+		1. util : Properties 객체 bean 등록.
+		2. context : 이미 존재하는 Property Source 에 새로운 property를 loading
+		
+	
+	-->
+	
+	<util:properties id="dbInfo" location="classpath:/kr/or/ddit/di/DBInfo.properties" />
+	
+	<context:property-placeholder location="classpath:/kr/or/ddit/di/DBInfo.properties"/>
+	
+	<bean id="info1" class="kr.or.ddit.di.collection.DBInfoVO" 
+		c:driverClassName="#{dbInfo['driverClass-Name']}"
+		c:url="#{dbInfo['url']}"
+		c:user="#{dbInfo['maindb.user']}" 
+		c:password="#{dbInfo['password']}"
+		c:initialSize="#{dbInfo['initialSize']}"
+		c:maxTotal="#{dbInfo['maxTotal']*4}"
+		c:maxIdle="#{dbInfo['maxIdle']}"
+		c:maxWait="#{dbInfo['maxWait']+4}"
+		
+	/>
+	
+	<!-- #{dbInfo['maindb.user']}  .은 문자열로 인식 -->
+    
+    <context:property-placeholder location="classpath:/kr/or/ddit/di/DBInfo.properties"/>
+    <bean id="info2" class="kr.or.ddit.di.collection.DBInfoVO"
+    	p:driverClassName="${driverClass-Name}"
+    	p:url="${url}"
+    	p:user="${maindb.user}"
+    	p:password="${maindb.password}" 
+        p:initialSize="${initialSize}"
+		p:maxTotal="${maxTotal}"
+		p:maxIdle="${maxIdle}"
+		p:maxWait="${maxWait}"
+    
+    />
+    
+    
+</beans>

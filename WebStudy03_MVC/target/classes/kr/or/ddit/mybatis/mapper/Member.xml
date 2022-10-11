@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.member.dao.MemberDAO">  <!-- dao interface 주소 -->
+   <sql id="searchFrag">
+      WHERE MEM_DELETE IS NULL  
+      <trim prefix="AND (" suffix=")">
+         <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(simpleCondition.searchWord)">
+            <choose>
+               <when test="'name' eq simpleCondition.searchType">
+                  INSTR(MEM_NAME, #{simpleCondition.searchWord}) > 0
+               </when>
+               <when test="'address' eq simpleCondition.searchType">
+                  INSTR(MEM_ADD1, #{simpleCondition.searchWord}) > 0
+               </when>
+               <otherwise>
+                     INSTR(MEM_NAME, #{simpleCondition.searchWord}) > 0
+                     OR
+                     INSTR(MEM_ADD1, #{simpleCondition.searchWord}) > 0
+               </otherwise>
+            </choose>
+         </if>
+      </trim>
+   </sql>
+
+      <select id="selectTotalRecord" resultType="int" parameterType="PagingVO">
+      		SELECT COUNT(*)
+      		FROM MEMBER
+			<include refid="searchFrag" />
+      </select>
+      <select id="selectMemberList" resultType="MemberVO" parameterType="PagingVO"> <!-- id가 키가 됨 -->
+          SELECT *
+          FROM (
+	           SELECT A.*, ROWNUM RNUM
+	           FROM(
+	           SELECT                            
+		           MEM_ID , MEM_NAME, MEM_ADD1,   
+		           MEM_HP, MEM_MAIL, MEM_MILEAGE 
+		       FROM MEMBER                    
+		      <include refid="searchFrag" />
+		       ORDER BY ROWID DESC
+		      ) A 
+	      ) B
+	      <![CDATA[ 
+	      WHERE RNUM >= #{startRow} AND RNUM <= #{endRow}
+	      ]]><!-- COMENT DATA 문자로 만들어줌 -->
+      </select>       
+      
+      <resultMap type="MemberVO" id="memberMap" autoMapping="true">
+                  <!-- result 타입   -->
+       	<!-- 	<result property="memId" column="MEM_ID"/>
+       		<result property="memName" column="MEM_NAME"/>
+       		<result property="memBir" column="MEM_BIR"/>  단순한 규칙성 -->
+       		<id property="memId" column="MEM_ID"/><!-- MemberVO 의 equels와 동일한 property 여야 함 -->
+       		<collection property="prodList" ofType="ProdVO" autoMapping="true">
+       			<!-- <result property="prodId" column="PROD_ID"/>
+       			<result property="prodMileage" column="PROD_MILEAGE"/> -->
+       			
+       			<id property="prodId" column="PROD_ID"/> <!-- 식별자 -->
+       			      <!-- VO에 equels와 한 세트   -->
+       			      
+       			 <association property="buyer" javaType="BuyerVO" autoMapping="true" />
+       			 	<!-- <result property="buyerName" column="BUYER_NAME"/> -->
+       			 	<!-- association은 1:1 관계라 중복 id 설정을 할 필요가 없음 -->   			
+       		</collection><!-- has many 관계  -->
+             
+      </resultMap>
+                
+         
+      <select id="selectMember" parameterType="string" resultMap="memberMap">
+				WITH CARTVIEW AS(
+      			SELECT DISTINCT CART_MEMBER, CART_PROD
+      			FROM CART
+      			
+      		), CARTPROD AS (
+      			SELECT CART_MEMBER, PRODVIEW.*
+      			FROM CARTVIEW INNER JOIN PRODVIEW ON(CART_PROD = PROD_ID)
+      		)
+	        SELECT                                                 
+				 MEM_ID, MEM_PASS, MEM_NAME,                           
+				 MEM_REGNO1, MEM_REGNO2,                               
+				 TO_CHAR(MEM_BIR, 'YYYY-MM-DD')MEM_BIR,                
+				 MEM_ZIP, MEM_ADD1,MEM_ADD2,                           
+				 MEM_HOMETEL, MEM_COMTEL, MEM_HP,                      
+				 MEM_MAIL, MEM_JOB, MEM_LIKE,                          
+				 MEM_MEMORIAL,                                         
+				 TO_CHAR( MEM_MEMORIALDAY,'YYYY-MM-DD')MEM_MEMORIALDAY,
+				 MEM_MILEAGE, MEM_DELETE
+				 , MEM_ROLE
+				 , PROD_ID, PROD_NAME, PROD_COST, PROD_PRICE, PROD_MILEAGE
+				 , BUYER_NAME
+				 , LPROD_NM                               
+			 FROM MEMBER LEFT OUTER JOIN CARTPROD ON (MEM_ID = CART_MEMBER)                                           
+		                                       
+			 WHERE MEM_ID = #{noname}              
+	      
+      </select>
+      <insert id="insertMember" parameterType="MemberVO">
+      
+    	INSERT INTO MEMBER(                                      
+
+		 	    MEM_ID          
+		 	    ,MEM_PASS       
+		 	    ,MEM_NAME       
+		 	    ,MEM_REGNO1     
+		 	    ,MEM_REGNO2     
+		 	    ,MEM_BIR        
+		 	    ,MEM_ZIP        
+		 	    ,MEM_ADD1       
+		 	    ,MEM_ADD2       
+		 	    ,MEM_HOMETEL    
+		 	    ,MEM_COMTEL     
+		 	    ,MEM_HP         
+		 	    ,MEM_MAIL       
+		 	    ,MEM_JOB        
+		 	    ,MEM_LIKE       
+		 	    ,MEM_MEMORIAL   
+		 	    ,MEM_MEMORIALDAY
+		 	) VALUES (          <!-- mybatis 는 화이트 스페이스를 null로 인식하기 때문에 type 지정 -->
+		 		     #{memId,jdbcType=VARCHAR} <!-- inline 파라미터  -->           
+		 		    ,#{memPass,jdbcType=VARCHAR}  
+		 		    ,#{memName,jdbcType=VARCHAR}  
+		 		    ,#{memRegno1,jdbcType=VARCHAR}  
+		 		    ,#{memRegno2,jdbcType=VARCHAR}  
+		 		    ,#{memBir,jdbcType=DATE}
+		 		    ,#{memZip,jdbcType=VARCHAR}  
+		 		    ,#{memAdd1,jdbcType=VARCHAR}
+		 		    ,#{memAdd2,jdbcType=VARCHAR}
+		 		    ,#{memHometel,jdbcType=VARCHAR}
+		 		    ,#{memComtel,jdbcType=VARCHAR}
+		 		    ,#{memHp,jdbcType=VARCHAR}
+		 		    ,#{memMail,jdbcType=VARCHAR}
+		 		    ,#{memJob,jdbcType=VARCHAR}
+		 		    ,#{memLike,jdbcType=VARCHAR}
+		 		    ,#{memMemorial,jdbcType=VARCHAR}
+		 		    ,#{memMemorialday,jdbcType=DATE}
+	 
+		 	)                  
+		     		
+		
+      </insert> 
+      <update id="updateMember" parameterType="MemberVO">
+           UPDATE MEMBER
+      SET
+         MEM_ZIP = #{memZip,jdbcType=CHAR}
+         , MEM_ADD1 = #{memAdd1,jdbcType=VARCHAR}
+         , MEM_ADD2 = #{memAdd2,jdbcType=VARCHAR}
+         , MEM_HOMETEL = #{memHometel,jdbcType=VARCHAR}
+         , MEM_COMTEL = #{memComtel,jdbcType=VARCHAR}
+         , MEM_HP = #{memHp,jdbcType=VARCHAR}
+         , MEM_MAIL = #{memMail,jdbcType=VARCHAR}
+         , MEM_JOB = #{memJob,jdbcType=VARCHAR}
+         , MEM_LIKE = #{memLike,jdbcType=VARCHAR}
+         , MEM_MEMORIAL = #{memMemorial,jdbcType=VARCHAR}
+         , MEM_MEMORIALDAY = TO_DATE( #{memMemorialday,jdbcType=DATE} , 'YYYY-MM-DD')
+      WHERE MEM_ID = #{memId,jdbcType=VARCHAR}   
+   </update>
+
+      <delete id="deleteMember" parameterType="string">
+      UPDATE MEMBER
+      SET
+         MEM_DELETE = '1'
+      WHERE MEM_ID = #{memId}
+   </delete>
+
+</mapper>

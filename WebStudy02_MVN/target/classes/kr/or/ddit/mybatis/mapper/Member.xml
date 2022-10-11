@@ -85,6 +85,8 @@
 				 MEM_MEMORIAL,                                         
 				 TO_CHAR( MEM_MEMORIALDAY,'YYYY-MM-DD')MEM_MEMORIALDAY,
 				 MEM_MILEAGE, MEM_DELETE
+				 , MEM_ROLE
+				 , MEM_IMG
 				 , PROD_ID, PROD_NAME, PROD_COST, PROD_PRICE, PROD_MILEAGE
 				 , BUYER_NAME
 				 , LPROD_NM                               
@@ -114,6 +116,7 @@
 		 	    ,MEM_LIKE       
 		 	    ,MEM_MEMORIAL   
 		 	    ,MEM_MEMORIALDAY
+		 	    ,MEM_IMG
 		 	) VALUES (          <!-- mybatis 는 화이트 스페이스를 null로 인식하기 때문에 type 지정 -->
 		 		     #{memId,jdbcType=VARCHAR} <!-- inline 파라미터  -->           
 		 		    ,#{memPass,jdbcType=VARCHAR}  
@@ -132,6 +135,7 @@
 		 		    ,#{memLike,jdbcType=VARCHAR}
 		 		    ,#{memMemorial,jdbcType=VARCHAR}
 		 		    ,#{memMemorialday,jdbcType=DATE}
+		 		    ,#{memImg,jdbcType=BLOB}
 	 
 		 	)                  
 		     		
@@ -151,6 +155,10 @@
          , MEM_LIKE = #{memLike,jdbcType=VARCHAR}
          , MEM_MEMORIAL = #{memMemorial,jdbcType=VARCHAR}
          , MEM_MEMORIALDAY = TO_DATE( #{memMemorialday,jdbcType=DATE} , 'YYYY-MM-DD')
+         
+         <if test="memImg neq null and memImg.length gt 0"> <!--null 이 아니거나 0보다 크면   -->
+         , MEM_IMG = #{memImg,jdbcType=BLOB}
+         </if>
       WHERE MEM_ID = #{memId,jdbcType=VARCHAR}   
    </update>
 
