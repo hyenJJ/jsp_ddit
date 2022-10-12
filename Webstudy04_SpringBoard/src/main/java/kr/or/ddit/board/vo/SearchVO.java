@@ -1,7 +1,9 @@
 package kr.or.ddit.board.vo;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -10,10 +12,10 @@ import lombok.ToString;
  *
  */
 @AllArgsConstructor
-@Getter
-@ToString
+@NoArgsConstructor
+@Data
 public class SearchVO {
-
+	
 	private String searchType;
 	private String searchWord;
 }

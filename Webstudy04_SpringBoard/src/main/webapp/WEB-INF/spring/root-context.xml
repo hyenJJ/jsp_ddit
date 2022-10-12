@@ -10,11 +10,12 @@
 
 
 
-
+    
 	<!-- Model layer 관리용 상위 컨테이너 설정 파일 -->
 	<context:component-scan base-package="kr.or.ddit" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
 		
+		<!-- controller service repository 셋다 component annotation을  사용하므로 빼줘야함 -->
 		<!-- 컨트롤러를 하위로 뺌 -->
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>

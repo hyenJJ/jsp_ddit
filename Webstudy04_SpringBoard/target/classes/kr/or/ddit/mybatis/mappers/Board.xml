@@ -7,10 +7,34 @@
 		
 	</resultMap>
 	
+	<sql id="searchFrag">
+		<where><!--동적 쿼리 element  -->
+			<if test="simpleCondition neq null and @org.apache.commons.lang3.StringUtils@isNotBlank(simpleCondition.searchType) ">
+				<choose>
+					<when test="simpleCondition.searchType eq 'title' ">
+						INSTR(BO_TITLE, #{simpleCondition.searchWord}) > 0
+					</when>
+					<when test="simpleCondition.searchType eq 'writer' ">
+						INSTR(BO_WRITER, #{simpleCondition.searchWord}) > 0
+					</when>
+					<when test="simpleCondition.searchType eq 'content' ">
+						INSTR(BO_CONTENT, #{simpleCondition.searchWord}) > 0
+					</when>
+					<otherwise>
+						INSTR(BO_TITLE, #{simpleCondition.searchWord}) > 0
+						OR INSTR(BO_WRITER, #{simpleCondition.searchWord}) > 0
+						OR INSTR(BO_CONTENT, #{simpleCondition.searchWord}) > 0
+					</otherwise>
+				</choose>
+			</if>
+		</where>
+	</sql>
+	
 	
 	<select id="selectTotalRecord" resultType="int" parameterType="PagingVO">
 		SELECT COUNT(*)
 		FROM FREEBOARD
+		<include refid="searchFrag" />
 	</select>
 	
 	
@@ -18,6 +42,7 @@
 		WITH SORTBOARD AS(
 			SELECT BO_NO, BO_TITLE, BO_WRITER, BO_DATE, BO_HIT, BO_REC
 			FROM FREEBOARD
+			<include refid="searchFrag" />
 			ORDER BY ROWiD DESC
 		), RNUMBOARD AS(
     		SELECT ROWNUM RNUM,

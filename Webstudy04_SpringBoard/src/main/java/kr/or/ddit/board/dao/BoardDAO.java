@@ -11,7 +11,9 @@ import kr.or.ddit.board.vo.PagingVO;
 /**
  * 게시판 관리(CRUD)용 Persistence Layer
  * 
- *
+ * 작업에 대한 정의만 되어있다.(Impl X)
+ * 
+ * 
  */
 @Mapper
 public interface BoardDAO {

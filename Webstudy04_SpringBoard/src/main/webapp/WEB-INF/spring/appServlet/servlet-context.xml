@@ -28,10 +28,23 @@
 		  <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"></bean>-->
 		  
 		  <!-- 따로 등록해줄 필요가 없다  -->
+		  <!-- 한가지 전략객체를 여러 구현체로 등록하는 경우 반드시 order 설정 필요.
+		  	   경우에 따라 order 가 가장 마지막이 되어야하는 전략객체도 있음.(other 생략)
+		   -->
 		  <mvc:annotation-driven></mvc:annotation-driven>
 		  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
 		  	p:prefix="/WEB-INF/jsp/"
 		  	p:suffix=".jsp"
+		  	
 		  
+		  />
+		  <!-- logicalviewName 과 등록된 definition name 이 동일하면  view 해결. -->
+		  <bean class="org.springframework.web.servlet.view.tiles3.TilesConfigurer" 
+		  	p:definitions="/WEB-INF/tiles/*-tiles.xml"
+		  />
+		  <bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" 
+		  	p:order="1"
 		  /> 
+		  
+		  <mvc:resources location="/resources/" mapping="/resources/**"></mvc:resources>
 </beans>
