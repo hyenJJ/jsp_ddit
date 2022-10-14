@@ -55,22 +55,89 @@
 	     ]]>
 	</select>
 	
-	
-	<select id="selectBoard" resultType="BoardVO" parameterType="int"> 
-	SELECT
+	<resultMap type="BoardVo" id="boardMap" autoMapping="true">
+		<id property="boNo" column="BOARD_NO"/>
+		<collection property="attatchList" ofType="AttatchVO" autoMapping="true">
+			<id property="attNo" column="ATT_NO"/>
+		</collection>
+	</resultMap>
+	<select id="selectBoard" resultMap="boardMap" parameterType="int"> 
+<!--  	SELECT
 	    BO_NO,  BO_TITLE, BO_WRITER,
 	    BO_IP,BO_MAIL,BO_PASS, BO_CONTENT, TO_CHAR(BO_DATE, 'YYYY-MM-DD') AS BO_DATE,
 	    BO_HIT, BO_REC, BO_PARENT
     FROM FREEBOARD
-    WHERE BO_NO = #{boNo}
-		
-		
+    WHERE BO_NO = #{boNo}  -->
+	
+ 	    SELECT
+	    A.BO_NO BOARD_NO ,  BO_TITLE, BO_WRITER,
+	    BO_IP, BO_MAIL, BO_PASS, BO_CONTENT, TO_CHAR(BO_DATE, 'YYYY-MM-DD') AS BO_DATE,
+	    BO_HIT, BO_REC, BO_PARENT, 
+	    ATT_NO, ATT_FILENAME, ATT_FILESIZE
+	    , ATT_FANCYSIZE
+	    , ATT_SAVENAME
+		FROM FREEBOARD A LEFT OUTER JOIN ATTATCH B
+		    ON(A.BO_NO = B.BO_NO)
+		WHERE A.BO_NO = #{boNo} 
 	</select>
 	
 	<update id="incrementBoHit" parameterType="int" >
 		UPDATE FREEBOARD
 		SET
 		BO_HIT = BO_HIT + 1
+		WHERE BO_NO = #{boNo}
+	</update>
+	
+	<insert id="insertBoard" parameterType="BoardVO" >
+	
+		<selectKey resultType="int" keyProperty="boNo" order="BEFORE">
+			SELECT FREEBOARD_SEQ.nextval
+			FROM DUAL
+		</selectKey>
+		INSERT INTO FREEBOARD (
+		    BO_NO,
+		    BO_TITLE,
+		    BO_WRITER,
+		    BO_IP,
+		    BO_MAIL,
+		    BO_PASS,
+		    BO_CONTENT,
+		    BO_DATE
+		) VALUES (
+			
+		   	#{boNo, jdbcType=NUMERIC}
+			,#{boTitle, jdbcType=VARCHAR}
+			,#{boWriter, jdbcType=VARCHAR}
+			,#{boIp, jdbcType=VARCHAR}
+			,#{boMail, jdbcType=VARCHAR}
+			,#{boPass, jdbcType=VARCHAR}
+			,#{boContent, jdbcType=CLOB}
+			,SYSDATE
+
+		)
+	</insert>
+	
+	<update id="updateBoard" parameterType="BoardVO">
+		UPDATE FREEBOARD
+		SET 
+		,BO_TITLE= #{boTitle, jdbcType=VARCHAR}
+		,BO_MAIL= #{boMail, jdbcType=VARCHAR}
+		,BO_CONTENT= #{boContent, jdbcType=CLOB}
+		WHERE
+	     BO_NO= #{boNo}
+	</update>
+	
+	<delete id="deleteBoard" parameterType="BoardVO">
+	
+		DELETE FROM FREEBOARD
+		WHERE BO_NO=#{boNo}
+	 
+	</delete>
+	
+	<update id="incrementRec" parameterType="int">
+		UPDATE FREEBOARD
+		SET
+		BO_REC = BO_REC + 1
 		WHERE BO_NO = #{boNo}
 	</update>
 

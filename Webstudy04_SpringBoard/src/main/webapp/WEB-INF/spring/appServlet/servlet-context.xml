@@ -31,7 +31,13 @@
 		  <!-- 한가지 전략객체를 여러 구현체로 등록하는 경우 반드시 order 설정 필요.
 		  	   경우에 따라 order 가 가장 마지막이 되어야하는 전략객체도 있음.(other 생략)
 		   -->
-		  <mvc:annotation-driven></mvc:annotation-driven>
+		  <mvc:annotation-driven validator="validator" ></mvc:annotation-driven>
+		  
+		  <!--  -->
+		  <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" 
+		  		p:validationMessageSource-ref="messageSource"
+		  />
+		  
 		  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
 		  	p:prefix="/WEB-INF/jsp/"
 		  	p:suffix=".jsp"
@@ -45,6 +51,32 @@
 		  <bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" 
 		  	p:order="1"
 		  /> 
-		  
+		  <!-- 정적 자원을 처리하기 위해  -->
 		  <mvc:resources location="/resources/" mapping="/resources/**"></mvc:resources>
+		  
+		  <!-- basenames(복수형태) ->  여러개의 파일도 가져올수있다 
+		  id = resourceBundleMessageSource -> MessageSource :  굳이 아이디를 바꾸는 이유는 누군가가 이아이디를 injection으로 사용한다는 것
+		  -->
+		  <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource" 
+		  	p:basenames="kr.or.ddit.msgs.message,kr.or.ddit.msgs.errorMessage"
+		  />
+		  
+		  <!-- 쿠키는 언제까지 저장하는지 기간설정이 필요하다
+		    p:cookieMaxAge 파라미터 타입은 integer임 -> 시간으로 하면 long type 이기때문에 millisecond로 설정
+		  -->
+		  <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"
+		  	p:cookieName="localeCookie"		  	
+		  	p:cookieMaxAge="#{60*60*24*7}"
+		  />
+		  
+		  <!-- interceptosr - 복수형태로 얼마든지 여러개 가능 -->
+		  <mvc:interceptors>
+		  		<mvc:interceptor>
+		  			<mvc:mapping path="/**"/> <!-- 모든 controller를 거침  -->
+		  			<mvc:exclude-mapping path="/resources/**"/>
+		  			<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"
+		  				p:paramName="language"
+		  			/>
+		  		</mvc:interceptor>
+		  </mvc:interceptors>
 </beans>

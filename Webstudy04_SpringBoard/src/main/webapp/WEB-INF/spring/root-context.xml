@@ -4,8 +4,10 @@
 	xmlns:c="http://www.springframework.org/schema/c"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 <!-- 스키마 종류 : beans, c, p, context -->
 
 
@@ -20,5 +22,12 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
 	</context:component-scan>
-
+	
+	<!-- 어플리케이션의 설정밗을 외부로 분리시킨. appInfo.properties 포딩 -->
+	<util:properties id="appInfo" location="classpath:kr/or/ddit/appInfo.properties" />
+	
+	<bean id="filterMultipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+		p:maxUploadSizePerFile="#{appInfo['max-file-size']}"
+		p:maxUploadSize="#{appInfo['max-file-size']}"
+	/><!-- p:maxUploadSizePerFile : 파일 하나당 업로드 사이즈를 제한 -->
 </beans>

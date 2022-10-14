@@ -1,16 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%><!-- spring 태그를 통해서 messageBundle안에 있는 p를 통해 가져옴   -->
 <c:set var="boardList" value="${pagingVO.dataList }" />
 <table class="table table-bordered table-strip">
    <thead class="table-dark">
       <tr>
-         <th>글번호</th>
-         <th>제목</th>
-         <th>작성자</th>
-         <th>작성일</th>
-         <th>조회수</th>
-         <th>추천수</th>
+         <th><spring:message code="board.boNo"/></th>
+         <th><spring:message code="board.boTitle"/></th>
+         <th><spring:message code="board.boWriter"/></th>
+         <th><spring:message code="board.boDate"/></th>
+         <th><spring:message code="board.boHit"/></th>
+         <th><spring:message code="board.boRec"/></th>
       </tr>
    </thead>
    <tbody id="listBody">
@@ -49,6 +50,7 @@
       <input type="button" value="검색" id="searchBtn"
          class="btn btn-primary"
       />
+		<a class="btn btn-success" href="<c:url value='/board/boardInsert.do'/>">새글쓰기</a>
    </div>
 </div>
 <script type="text/javascript">
@@ -67,7 +69,7 @@
    let listBody = $("#listBody");
    let pagingArea = $(".pagingArea").on("click", "a", function(event){
       event.preventDefault();
-      let page = $(this).data("page");
+      let page = $(this).data("page");	
       if(!page) return false;
       pageTag.val(page);
       searchForm.submit();

@@ -18,7 +18,7 @@ import kr.or.ddit.board.vo.PagingVO;
 @Mapper
 public interface BoardDAO {
 
-// 	insertBoard	
+	public int insertBoard(BoardVO board);	
 	
 	public BoardVO selectBoard(@Param("boNo") int boNo); // 값만 전달된 경우는 이름이 없어서 @param으로 설정해줌
 	public int incrementBoHit(@Param("boNo")int boNo);
@@ -27,6 +27,9 @@ public interface BoardDAO {
     
     public int selectTotalRecord(PagingVO<BoardVO> pagingVO);
     
-//	updateBoard
-//	deleteBoard
+	public int updateBoard(BoardVO board);
+	
+    public int deleteBoard(BoardVO board);
+    
+    public int incrementRec(int boNo);
 }
