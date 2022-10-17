@@ -38,8 +38,25 @@
 		SELECT * FROM DUAL
 	</insert>
 	
-	<delete id="deleteAttatches" parameterType="int">
+	<delete id="deleteAttatchess" parameterType="int">
 		DELETE FROM ATTATCH
 		WHERE BO_NO = #{boNo}
 	</delete>
+	
+   <delete id="deleteAttatches" parameterType="int[]">
+      DELETE FROM ATTATCH
+      WHERE ATT_NO IN 
+         <foreach collection="delAttNos" open="(" close=")" item="attNo" separator=",">
+            #{attNo}
+         </foreach>
+      
+   </delete>
+   
+   <select id="selectAttatch" parameterType="int" resultType="AttatchVO">
+   SELECT ATT_FILENAME, ATT_SAVENAME 
+   		, ATT_FILESIZE, ATT_MIME
+   FROM ATTATCH
+   WHERE ATT_NO = #{attNo}
+   </select>
+
 </mapper>

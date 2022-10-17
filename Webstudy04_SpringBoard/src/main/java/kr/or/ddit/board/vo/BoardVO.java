@@ -70,4 +70,7 @@ public class BoardVO {
 	
 	private List<AttatchVO> attatchList;
 	
+	//BoardVO가 command Object이면서 modelattribute이기 때문에 BoardVO에서 설정
+	private int[] delAttNos;
+	
 }

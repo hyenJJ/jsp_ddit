@@ -49,8 +49,14 @@
 		  	p:definitions="/WEB-INF/tiles/*-tiles.xml"
 		  />
 		  <bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" 
-		  	p:order="1"
+		  	 p:order="1"
 		  /> 
+		  
+		  <bean id="downloadView" class="kr.or.ddit.board.view.DownloadView" />
+		  <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" 
+		  	 p:order="2"
+		  />
+		  
 		  <!-- 정적 자원을 처리하기 위해  -->
 		  <mvc:resources location="/resources/" mapping="/resources/**"></mvc:resources>
 		  

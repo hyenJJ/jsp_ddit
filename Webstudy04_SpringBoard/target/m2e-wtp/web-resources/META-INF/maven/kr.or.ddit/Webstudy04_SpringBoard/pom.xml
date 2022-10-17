@@ -41,6 +41,14 @@
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 		</dependency>
+		
+		<!-- 트랙젝션 관리 지원 - AOP 방법론 -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.9.7</version>
+		</dependency>
+
 
 		<!-- Spring + DataBase Integeration -->
 		<dependency>
@@ -217,7 +225,7 @@
 			<version>${org.springframework-version}</version>
 			<scope>test</scope>
 		</dependency>
-        <!-- 모의 컨텍스트  -->
+		<!-- 모의 컨텍스트 -->
 	</dependencies>
 
 </project>

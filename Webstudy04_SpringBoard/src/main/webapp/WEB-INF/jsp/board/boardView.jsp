@@ -53,7 +53,10 @@
       <th><spring:message code="board.boFiles"/></th>
       <td>
          <c:forEach items="${board.attatchList }" var="attatch" varStatus="vs">
-            ${attatch.attFilename }(${attatch.attFancysize })
+         	<c:url value="/board/download.do" var="downloadURL">
+         		<c:param name="what" value="${attatch.attNo }"></c:param>
+         	</c:url>
+            <a href="${ downloadURL}">${attatch.attFilename }</a>(${attatch.attFancysize })
             ${not vs.last?"|":"" }
          </c:forEach>
       </td>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+
+	<!-- 스키마 종류 : beans, c, p, aop, tx  -->
+	<!-- 데이타 소스를 사용하기위해선 injection 이 필요 (setter injection) -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		p:dataSource-ref="dataSource"
+	/>
+		
+ 	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	 
+	<!--    <aop:aspectj-autoproxy />  -->
+	
+    <!-- pointcut은 어떤 target을 proxy로 설정하는지 결정하는 역할 
+	<bean id="LoggingAdvice" class="kr.or.ddit.advice.LoggingAdvice"></bean>-->
+	
+	<!-- spring이 지원하는 트랜젝션 advice  -->
+<!-- 	<tx:advice id="txAdvice">
+		<tx:attributes>
+			<tx:method name="retrieve*" read-only="true"/>    이 조건에 맞는 method 는 조회만 하기 때문에 트랙잭션을 관리 할 필요가 업다
+			<tx:method name="creat*" propagation="REQUIRED"/>  트랜젝션 관리 필요함 
+			<tx:method name="modify*" propagation="REQUIRED"/> 트랜젝션 관리 필요함 
+			<tx:method name="remove*" propagation="REQUIRED"/> 트랜젝션 관리 필요함 
+		</tx:attributes>
+	</tx:advice> -->
+	
+	<!-- 모든 weaving 설정  -->
+<!-- 	<aop:config proxy-target-class="false"> false ->  interface를 기반으로 froxy 생성 
+		<aop:pointcut expression="execution(* kr.or.ddit.board.service.*.*(..))" id="pointcut"/>타켓을 걸러내는 설정
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut"  />
+		<aop:aspect ref="LoggingAdvice">
+			<aop:before method="before" pointcut-ref="pointcut"/> 
+			<aop:after-returning method="afterReturn" pointcut-ref="pointcut" returning="retValue"/>
+			
+			<aop:around method="around" pointcut-ref="pointcut"/>
+		</aop:aspect>
+	</aop:config> -->
+</beans>

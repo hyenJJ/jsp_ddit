@@ -3,14 +3,14 @@ package kr.or.ddit.board.controller;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.print.attribute.standard.Media;
+
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+
+
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.or.ddit.board.service.BoardService;
+import kr.or.ddit.board.service.BoardServiceImpl;
 import kr.or.ddit.board.vo.BoardVO;
 import kr.or.ddit.board.vo.PagingVO;
 import kr.or.ddit.board.vo.SearchVO;
+import lombok.extern.slf4j.Slf4j;
 
 
 
@@ -42,15 +44,31 @@ import kr.or.ddit.board.vo.SearchVO;
  * 				@RequestMapping(consumes, unmarshalling)
  * 		4) @ResponseBody : 핸들러 메소드의 리턴값으로 response body(message, content) 를 구성할 때.
  * 				@RequestMapping(produces, marshalling)
- */	
+ */
+@Slf4j
 @Controller
 @RequestMapping("/board") // 앞에 /board 가 공통이기 때문에 따로 설정해줌 
 public class BoardRetrieveController {
 
-	@Inject
 	private BoardService service;
 	
+	/*
+	  구현체를 BoardServiceImpl 로 했을때 ->  오류   
+	 proxy는 interface를 기준으로 injection을 받아야한다 
+	 
+	 그러나 ,
+	 weabing 설정할 때 
+	 proxy-target-class="true" 하면
+	 interface가 없어도 생성 가능하다 
+	 
+	 */
+
 	
+	@Inject
+	public void setService(BoardService service) {
+		this.service = service;
+		log.info("주입된 business logic : {}", service.getClass().getName());
+	}
 	
 	@RequestMapping(value="boardList.do", method=RequestMethod.GET)
 	public String listUI() {

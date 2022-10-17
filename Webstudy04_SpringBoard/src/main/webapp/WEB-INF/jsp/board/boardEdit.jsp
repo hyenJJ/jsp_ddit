@@ -4,9 +4,10 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
+<script src="${pageContext.request.contextPath}/resources/js/ckeditor/ckeditor.js"></script>
 
-<form:form method="post" modelAttribute="board"><!-- controller에서 결정해준 이름 -->
-	<form:hidden path="boNo"/>
+<form:form id="boardForm" method="post" modelAttribute="board" enctype="multipart/form-data"><!-- controller에서 결정해준 이름 -->
+	<form:hidden path="boNo"/>                                <!-- 이제부터 전송되는 타입은 part 타입 -->
   <table class="table table-bordered">
 		<tr>
 			<th><spring:message code="board.boTitle"/></th>
@@ -40,6 +41,23 @@
 				<form:errors path="boIp" element="span" cssClass="error" ></form:errors>
 			</td>
 		</tr>
+		<tr>
+			<th>기존 첨부파일</th>
+			<td>
+				<c:forEach items="${board.attatchList }" var="attatch">
+					<span class="fileArea">	
+						${attatch.attFilename }
+						<span class="btn btn-danger delBtn" data-attNo-no="${attatch.attNo }" >삭제</span><!-- 몇번 파일을 삭제 할 것인지 남겨야함  -->
+					</span>
+				</c:forEach>
+			</td>
+		</tr>
+		<tr>
+			<th>신규 첨부파일</th>
+			<td>
+				<input type="file" name="boFiles"/>
+			</td>
+		</tr>
 	
 		<tr>
 			<th><spring:message code="board.boPass"/></th>
@@ -66,4 +84,16 @@
 		
   </table>
 </form:form>
-    
+<script>
+   CKEDITOR.replace('boContent');
+   let boardForm = $("#boardForm");
+   $(".delBtn").on("click", function(event){
+      let attNo = $(this).data("attNo");
+      let newInput = $("<input>").attr({
+         type:"text"
+         , name:"delAttNos"
+      }).val(attNo);
+      boardForm.append(newInput);
+      $(this).parents("span.fileArea").hide();
+   });
+</script>

@@ -21,7 +21,8 @@ public class PagingVO<T> {
 	private int endPage;
 	
 	//검색조건
-	private SearchVO simpleCondition;  
+	private SearchVO simpleCondition; 
+	
 	private T detailCondition; // 상세검색 -> 검색의 대상이 되는 
 	
 	private List<T> dataList;
